@@ -1,5 +1,6 @@
 import random
 import pandas as pd
+import string
 
 
 class Dataset:
@@ -24,22 +25,18 @@ class Vin:
             new_char = int(char)
             return new_char
         except Exception:
-            try:
-                new_char = str(char)
-                return new_char
-            except Exception as e:
-                raise e
+            return char
 
     def _reset(self):
         self.prev_char = None
         self.char_cnt = 0
         self.seq_pttrn = ''
 
-    def find_pattens(self):
+    def decode_patterns(self):
         self._reset()
 
+        # loop through each vin and decode its format
         for vin in self.vins:
-            print(vin)
             for char in vin:
                 char = self._convert_char(char)
                 if type(char) != type(self.prev_char):
@@ -49,16 +46,36 @@ class Vin:
                     self.prev_char = char
                 self.char_cnt += 1
             self.seq_pttrn += '{}'.format(str(self.char_cnt))
-            print(self.seq_pttrn)
             self.patterns[self.seq_pttrn] = self.patterns.get(
                 self.seq_pttrn, 0) + 1
 
             self._reset()
-        print(self.seq_pttrn)
-        print(self.patterns)
+        return self.patterns
 
-    def generate(self):
-        pass
+    def _generate_substr(self, n, char_type):
+        if char_type == 's':
+            alphabet = string.ascii_uppercase
+            sub_str = ''
+            for _ in range(n):
+                char = random.choice(alphabet)
+                sub_str += char
+        elif char_type == 'i':
+            sub_str = ''
+            for _ in range(n):
+                sub_str += str(random.randint(0, 9))
+        return sub_str
+
+    def generate_single_vin(self, pattern):
+        tokens = pattern.split('-')
+        new_vin = ''
+        for i, token in enumerate(tokens):
+            num = int(token)
+            if i % 2 == 0:
+                char_type = 's'
+            else:
+                char_type = 'i'
+            new_vin += self._generate_substr(num, char_type)
+        return new_vin
 
 
 def main():
@@ -66,7 +83,10 @@ def main():
     vins_df = dataset.data.iloc[:, 2:3]
     vin_strings = list(map(lambda x: x[0], vins_df.values))
     vin = Vin(vin_strings)
-    vin.find_pattens()
+    vin_patterns = vin.decode_patterns()
+    vin_pools = vin_patterns.keys()
+    target_vin_pattern = random.choice(vin_pools)
+    print(vin.generate_single_vin(target_vin_pattern))
 
 
 if __name__ == '__main__':
