@@ -1,15 +1,17 @@
 import random
 import pandas as pd
 import string
+import os
+from file_path import locate_file
 
 
 class Dataset:
 
-    FILE = './data/original_data.csv'
+    FILE_DIR = 'data/original_data.csv'
 
     def __init__(self):
-        self.data = pd.read_csv(Dataset.FILE, header=None)
-        self.dimension = self.data.shape
+        self.target_file = locate_file(Dataset.FILE_DIR)
+        self.data = pd.read_csv(self.target_file, header=None)
 
 
 class Vin:
@@ -38,6 +40,7 @@ class Vin:
         # loop through each vin and decode its format
         for vin in self.vins:
             for char in vin:
+                # convert a character into a integer otherwise keep it as string
                 char = self._convert_char(char)
                 if type(char) != type(self.prev_char):
                     if self.prev_char is not None:
