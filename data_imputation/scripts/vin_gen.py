@@ -5,18 +5,14 @@ import os
 from file_path import locate_file
 
 
-class Dataset:
+class Vin:
 
     FILE_DIR = 'data/original_data.csv'
 
     def __init__(self):
-        self.target_file = locate_file(Dataset.FILE_DIR)
+        self.target_file = locate_file(Vin.FILE_DIR)
         self.data = pd.read_csv(self.target_file, header=None)
-
-
-class Vin:
-    def __init__(self, vins):
-        self.vins = vins
+        self.vins = None
         self.prev_char = None
         self.char_cnt = 0
         self.seq_pttrn = ''
@@ -34,9 +30,7 @@ class Vin:
         self.char_cnt = 0
         self.seq_pttrn = ''
 
-    def decode_patterns(self):
-        self._reset()
-
+    def _decode_patterns(self):
         # loop through each vin and decode its format
         for vin in self.vins:
             for char in vin:
@@ -51,7 +45,7 @@ class Vin:
             self.seq_pttrn += '{}'.format(str(self.char_cnt))
             self.patterns[self.seq_pttrn] = self.patterns.get(
                 self.seq_pttrn, 0) + 1
-
+            # reset meta data to decode next vin
             self._reset()
         return self.patterns
 
@@ -68,7 +62,20 @@ class Vin:
                 sub_str += str(random.randint(0, 9))
         return sub_str
 
-    def generate_single_vin(self, pattern):
+    def _trace_vins(self):
+        vins_df = self.data.iloc[:, 2:3]
+        self.vins = list(map(lambda x: x[0], vins_df.values))
+        return self.vins
+
+    def _generator_vin_format(self):
+        self.vins = self._trace_vins()
+        self.patterns = self._decode_patterns()
+        vin_formations = self.patterns.keys()
+        target_vin_formation = random.choice(vin_formations)
+        return target_vin_formation
+
+    def generate_vin(self):
+        pattern = self._generator_vin_format()
         tokens = pattern.split('-')
         new_vin = ''
         for i, token in enumerate(tokens):
@@ -82,14 +89,8 @@ class Vin:
 
 
 def main():
-    dataset = Dataset()
-    vins_df = dataset.data.iloc[:, 2:3]
-    vin_strings = list(map(lambda x: x[0], vins_df.values))
-    vin = Vin(vin_strings)
-    vin_patterns = vin.decode_patterns()
-    vin_pools = vin_patterns.keys()
-    target_vin_pattern = random.choice(vin_pools)
-    print(vin.generate_single_vin(target_vin_pattern))
+    vin = Vin()
+    print(vin.generate_vin())
 
 
 if __name__ == '__main__':

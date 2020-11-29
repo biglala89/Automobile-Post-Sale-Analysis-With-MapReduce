@@ -3,6 +3,7 @@ import random
 
 
 class IncidentType:
+
     def __init__(self):
         self.initial_sale = 'I'
         self.other_incidents = ('A', 'R')

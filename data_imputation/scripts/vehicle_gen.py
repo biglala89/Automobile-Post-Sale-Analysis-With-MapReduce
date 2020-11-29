@@ -10,20 +10,22 @@ class Vehicle:
 
     def __init__(self):
         self.target_file = locate_file(Vehicle.FILE_DIR)
-        self.data = pd.read_csv(self.target_file, header=None)
-        self.data.rename(
-            columns={0: 'model', 1: 'make', 2: 'year'}, inplace=True)
-        self.length = self.data.shape[0]
+        self.data = self._read_file(self.target_file)
 
-    def generate_single_car(self):
-        rand_num = random.randint(0, self.length)
-        new_car = self.data.iloc[rand_num, :]
-        print(new_car)
+    def _read_file(self, target_file):
+        with open(target_file, 'r') as f:
+            lines = f.readlines()
+        vehicle_info = list(map(lambda line: line.rstrip('\n'), lines))
+        return vehicle_info
+
+    def generate_vehicle_info(self):
+        return random.choice(self.data)
 
 
 def main():
     vehicle = Vehicle()
-    vehicle.generate_single_car()
+    for _ in range(10):
+        print(vehicle.generate_vehicle_info())
 
 
 if __name__ == "__main__":
