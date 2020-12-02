@@ -1,9 +1,10 @@
+import argparse
 from vin_gen import Vin
 from incident_gen import IncidentType
 from vehicle_gen import Vehicle
-import random
 from file_path import locate_file
 import pandas as pd
+import random
 
 
 class PostSalesReport:
@@ -46,9 +47,19 @@ class PostSalesReport:
                 f.write(line)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog="Post_Sale_Automobile_Analysis")
+    parser.add_argument('--gen_n', type=int, default=50,
+                        help='generate n unique vehicle vins')
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
+    num_vins = args.gen_n
     psr = PostSalesReport()
-    psr.generate_data(50)
+    psr.generate_data(num_vins)
 
 
 if __name__ == '__main__':
