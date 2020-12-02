@@ -37,7 +37,7 @@ class PostSalesReport:
     def _format_record(self, incident, vin, vehicle, initial_sale=False):
         if initial_sale:
             return "{},{},{},,\n".format(incident, vin, vehicle)
-        return "{},{},,,\n".format(incident, vin)
+        return "{},{},,,,,\n".format(incident, vin)
 
     def generate_data(self, num):
         with open(self.dstn, 'w') as f:
