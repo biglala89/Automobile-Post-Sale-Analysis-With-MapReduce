@@ -6,7 +6,7 @@ import random
 
 class Vehicle:
 
-    FILE_DIR = 'data_imputation/data/cars.csv'
+    FILE_DIR = 'data_mocking/data/cars.csv'
 
     def __init__(self):
         self.target_file = locate_file(Vehicle.FILE_DIR)

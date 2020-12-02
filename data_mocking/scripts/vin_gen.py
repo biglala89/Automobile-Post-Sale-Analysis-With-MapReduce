@@ -7,7 +7,7 @@ from file_path import locate_file
 
 class Vin:
 
-    FILE_DIR = 'data/original_data.csv'
+    FILE_DIR = 'source_data/original_data.csv'
 
     def __init__(self):
         self.target_file = locate_file(Vin.FILE_DIR)
