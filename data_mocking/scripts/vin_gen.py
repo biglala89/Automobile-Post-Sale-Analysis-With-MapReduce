@@ -10,7 +10,7 @@ class Vin:
     Randomly generate unique vehicle VIN.
     """
 
-    FILE_DIR = 'source_data/original_data.csv'
+    FILE_DIR = 'source_data/sample_data.csv'
 
     def __init__(self):
         """

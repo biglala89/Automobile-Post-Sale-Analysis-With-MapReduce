@@ -9,5 +9,5 @@ python data_mocking.py --gen_n 10000
 to generate 10,000 unique vehicles VINs. If no argument is provided, a default value of 500 is used.
 * Note:
     1. there could be a random number of records per VIN, the number of records (capped at 10 per VIN) is determined by a random number generator every time a new VIN is generated. 
-    2. Incident_date and description are left out of the equation as they are irrelevant to the analysis.
+    2. The row number column, incident_date and description are left out of the equation as they are irrelevant to the analysis.
     3. If you find two vehicles (make, model, year) with the same VIN, **_congratulations_** you just hit the jackpot!

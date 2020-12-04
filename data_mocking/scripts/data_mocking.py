@@ -20,7 +20,7 @@ class PostSalesReport:
         self.vin = Vin()
         self.incident = IncidentType()
         self.vehicle = Vehicle()
-        self.dstn = locate_file('source_data/mocking_output.csv')
+        self.dstn = locate_file('source_data/data.csv')
 
     def _generate_records(self):
         """
@@ -99,7 +99,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(
         prog="Post_Sale_Automobile_Analysis")
-    parser.add_argument('--gen_n', type=int, default=50,
+    parser.add_argument('--gen_n', type=int, default=500,
                         help='generate n unique vehicle vins')
     return parser.parse_args()
 
